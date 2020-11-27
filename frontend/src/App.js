@@ -25,7 +25,10 @@ class App extends Component {
   }
 
   authenticateUser = () => {
-    axiosInstance.post('/api/user/authenticate', { token: localStorage.getItem('token') })
+    let params = {
+      token: localStorage.getItem('token')
+    }
+    axiosInstance.get('/api/user/authenticate', { params })
       .then(res => this.setState({ username: res.data.data.username, isAuthenticated: true }))
       .catch(err => this.setState({ username: '', isAuthenticated: false }));
   }

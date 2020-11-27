@@ -65,11 +65,14 @@ class Problems extends Component {
     }
 
     onAddTag = () => {
-        axiosInstance.post('/api/tags/addToProblem', {
+
+        let params = {
             token: localStorage.getItem('token'),
             tag: this.state.tagToAdd,
             problem: this.state.problemCode
-        }).then(res => {
+        }
+
+        axiosInstance.get('/api/tags/addToProblem', { params }).then(res => {
             this.setState({
                 message: res.data.data
             })

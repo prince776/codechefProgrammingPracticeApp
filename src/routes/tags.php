@@ -56,61 +56,9 @@ $app->get('/api/tags', function(Request $req, Response $res)
     }
 });
 
-// Get tags of a specefic type (author/actual_tag/private_tag), limit (default = 20) and offset (default = 0)
-$app->get('/api/tags/{type}', function(Request $req, Response $res)
-{
-    $type = $req->getAttribute('type');
-    $limit = $req->getParam('limit');
-    $offset = $req->getParam('offset');
-
-    if ($limit == NULL) $limit = LIMIT;
-    if ($offset == NULL) $offset = OFFSET;
-
-    $userID = 0; // The default one
-    // Get user ID
-    $token = $req->getParam('token');
-    if ($token != NULL)
-    {
-        try
-        {
-            $sql = "SELECT userID FROM UserSessions WHERE token = '$token'";
-            $db = new db();
-            $db = $db->connect();
-
-            $stmt = $db->query($sql);
-            $uid = $stmt->fetchAll(PDO::FETCH_OBJ);
-            $db = null;
-
-            if ($uid != NULL)
-                $userID = $uid[0]->userID;
-        }
-        catch (PDOException $e)
-        {
-            return sendError($res, $e, "Error occured");
-        }
-    }
-    $sql = "SELECT * FROM Tags WHERE (type = '$type' AND userID in (0, $userID)) LIMIT $limit OFFSET $offset";
-    try
-    {
-        $db = new db();
-        $db = $db->connect();
-        
-        $stmt = $db->query($sql);
-        $tags = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $db = null;
-        
-        if ($tags == NULL) return sendError($res, "type not found");
-
-        return sendJson($res, $tags, "Tag matching type sent successfully");
-    }
-    catch (PDOException $e)
-    {
-        return sendError($res, $e, "Error occured");
-    }
-});
 
 // Add a private tag(pre existing/ new, will auto detect) to a problem
-$app->post('/api/tags/addToProblem', function(Request $req, Response $res)
+$app->get('/api/tags/addToProblem', function(Request $req, Response $res)
 {
     // Get used id
     $userID = 0; 
@@ -281,6 +229,60 @@ $app->post('/api/tags/addToProblem', function(Request $req, Response $res)
         return sendError($res, $e, "Error occured");
     } 
     return sendJson($res, "Tag successfully added to this problem");
+});
+
+
+// Get tags of a specefic type (author/actual_tag/private_tag), limit (default = 20) and offset (default = 0)
+$app->get('/api/tags/{type}', function(Request $req, Response $res)
+{
+    $type = $req->getAttribute('type');
+    $limit = $req->getParam('limit');
+    $offset = $req->getParam('offset');
+
+    if ($limit == NULL) $limit = LIMIT;
+    if ($offset == NULL) $offset = OFFSET;
+
+    $userID = 0; // The default one
+    // Get user ID
+    $token = $req->getParam('token');
+    if ($token != NULL)
+    {
+        try
+        {
+            $sql = "SELECT userID FROM UserSessions WHERE token = '$token'";
+            $db = new db();
+            $db = $db->connect();
+
+            $stmt = $db->query($sql);
+            $uid = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $db = null;
+
+            if ($uid != NULL)
+                $userID = $uid[0]->userID;
+        }
+        catch (PDOException $e)
+        {
+            return sendError($res, $e, "Error occured");
+        }
+    }
+    $sql = "SELECT * FROM Tags WHERE (type = '$type' AND userID in (0, $userID)) LIMIT $limit OFFSET $offset";
+    try
+    {
+        $db = new db();
+        $db = $db->connect();
+        
+        $stmt = $db->query($sql);
+        $tags = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $db = null;
+        
+        if ($tags == NULL) return sendError($res, "type not found");
+
+        return sendJson($res, $tags, "Tag matching type sent successfully");
+    }
+    catch (PDOException $e)
+    {
+        return sendError($res, $e, "Error occured");
+    }
 });
 
 // Get data on a specefic tag (for default users only for now)

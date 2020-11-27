@@ -3,7 +3,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 // Sign up
-$app->post('/api/user/signup', function(Request $req, Response $res)
+$app->get('/api/user/signup', function(Request $req, Response $res)
 {
     $username = $req->getParam('username');
     $password = $req->getParam('password');
@@ -114,7 +114,7 @@ $app->post('/api/user/signup', function(Request $req, Response $res)
 });
 
 // Login
-$app->post('/api/user/login', function(Request $req, Response $res)
+$app->get('/api/user/login', function(Request $req, Response $res)
 {
     $username = $req->getParam('username');
     $password = $req->getParam('password');
@@ -201,7 +201,7 @@ $app->post('/api/user/login', function(Request $req, Response $res)
 });
 
 // Authenticate session
-$app->post('/api/user/authenticate', function(Request $req, Response $res)
+$app->get('/api/user/authenticate', function(Request $req, Response $res)
 {
     $token = $req->getParam('token');
 
@@ -234,7 +234,7 @@ $app->post('/api/user/authenticate', function(Request $req, Response $res)
 });
 
 // Logout
-$app->post('/api/user/logout', function(Request $req, Response $res)
+$app->get('/api/user/logout', function(Request $req, Response $res)
 {
     $token = $req->getParam('token');
 

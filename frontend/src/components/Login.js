@@ -42,9 +42,8 @@ class Login extends Component {
             username: this.state.username,
             password: this.state.password
         }
-        axiosInstance.post(req_url, params)
+        axiosInstance.get(req_url, { params })
             .then(res => {
-                console.log(res.data.data);
                 this.setState({
                     message: res.data.msg,
                 }, () => this.props.setUser(res.data.data.username, res.data.data.token, true))

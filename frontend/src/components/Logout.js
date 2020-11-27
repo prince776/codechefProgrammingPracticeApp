@@ -10,7 +10,10 @@ class Logout extends Component {
     }
 
     onLogout = () => {
-        axiosInstance.post('/api/user/logout', { token: localStorage.getItem('token') })
+        let params = {
+            token: localStorage.getItem('token')
+        }
+        axiosInstance.get('/api/user/logout', { params })
             .then(res => {
                 localStorage.removeItem('token');
                 this.props.setUser('', '', false);

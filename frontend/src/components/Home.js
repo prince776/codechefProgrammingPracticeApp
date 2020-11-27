@@ -18,7 +18,6 @@ class Home extends Component {
     }
 
     setSelected = (tag) => {
-        console.log(tag);
         if (this.state.selectedTags.some(t => t.name == tag.name))
             return;
 
