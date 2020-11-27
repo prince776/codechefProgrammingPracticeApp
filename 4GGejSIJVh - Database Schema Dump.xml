@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- phpMyAdmin XML Dump
+- version 4.8.5
+- https://www.phpmyadmin.net
+-
+- Host: localhost
+- Generation Time: Nov 27, 2020 at 04:02 PM
+- Server version: 8.0.13-4
+- PHP Version: 7.2.24-0ubuntu0.18.04.7
+-->
+
+<pma_xml_export version="1.0" xmlns:pma="https://www.phpmyadmin.net/some_doc_url/">
+    <!--
+    - Structure schemas
+    -->
+    <pma:structure_schemas>
+        <pma:database name="4GGejSIJVh" collation="utf8_unicode_ci" charset="utf8">
+            <pma:table name="Problems">
+                CREATE TABLE `Problems` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `category` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `successfulSubmissions` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `accuracy` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=14256 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+            <pma:table name="Tags">
+                CREATE TABLE `Tags` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `problem_count` int(11) NOT NULL,
+                  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `userID` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `Tags_ibfk_1` (`userID`),
+                  CONSTRAINT `Tags_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `Users` (`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB AUTO_INCREMENT=3169 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+            <pma:table name="Tag_Problem_Relation">
+                CREATE TABLE `Tag_Problem_Relation` (
+                  `tagID` int(11) NOT NULL,
+                  `problemID` int(11) NOT NULL,
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  PRIMARY KEY (`id`),
+                  KEY `tagID` (`tagID`),
+                  KEY `problemID` (`problemID`),
+                  CONSTRAINT `Tag_Problem_Relation_ibfk_1` FOREIGN KEY (`tagID`) REFERENCES `Tags` (`id`) ON DELETE CASCADE,
+                  CONSTRAINT `Tag_Problem_Relation_ibfk_2` FOREIGN KEY (`problemID`) REFERENCES `Problems` (`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB AUTO_INCREMENT=17270 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+            <pma:table name="Test">
+                CREATE TABLE `Test` (
+                  `tagID` int(11) NOT NULL,
+                  `problemID` int(11) NOT NULL,
+                  `userID` int(11) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+            <pma:table name="Users">
+                CREATE TABLE `Users` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+            <pma:table name="UserSessions">
+                CREATE TABLE `UserSessions` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                  `userID` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `userID` (`userID`),
+                  CONSTRAINT `UserSessions_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `Users` (`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+            </pma:table>
+        </pma:database>
+    </pma:structure_schemas>
+</pma_xml_export>
